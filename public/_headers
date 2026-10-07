@@ -1,0 +1,55 @@
+/*
+ * public/_headers
+ *
+ * HTTP security headers for deployment on Netlify, Cloudflare Pages,
+ * or any static host that supports _headers files.
+ *
+ * These headers enforce the privacy-first promise at the transport layer:
+ * even if someone modifies the JavaScript, the browser will enforce these
+ * restrictions independently.
+ *
+ * For Nginx, Apache, or other servers, see docs/internal/server-headers.md
+ * which contains equivalent configuration blocks.
+ */
+
+/*
+ * All paths — base security headers
+ */
+/*
+  # Prevent this page from being embedded in iframes (clickjacking protection)
+  X-Frame-Options: DENY
+
+  # Prevent MIME-type sniffing
+  X-Content-Type-Options: nosniff
+
+  # Do not send the referrer URL to any other origin.
+  # This means if someone clicks a link from the results page, the destination
+  # site cannot see that they came from chatalmanac.
+  Referrer-Policy: no-referrer
+
+  # Disable all browser features that could be used to fingerprint the user
+  # or access sensitive hardware.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), autoplay=(), fullscreen=(self)
+
+  # Prevent this page from sharing a browsing context with cross-origin pages.
+  # This defends against Spectre-style side-channel attacks.
+  Cross-Origin-Opener-Policy: same-origin
+
+  # Prevent cross-origin pages from loading our resources.
+  Cross-Origin-Resource-Policy: same-origin
+
+  # Embedder policy (needed for SharedArrayBuffer if ever used)
+  Cross-Origin-Embedder-Policy: require-corp
+*/
+
+# Netlify _headers format (uncomment the block above and remove comment markers for production)
+# The format below is for Netlify/Cloudflare Pages:
+
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; worker-src 'self' blob:; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none';

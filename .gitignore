@@ -1,0 +1,39 @@
+# ── Build output ─────────────────────────────────────────────────────────────
+dist/
+dist-ssr/
+
+# ── Dependencies ──────────────────────────────────────────────────────────────
+node_modules/
+
+# ── Private / internal developer notes (never commit these) ──────────────────
+docs/internal/progress.md
+docs/internal/decisions.md
+
+# ── Local env / secrets ───────────────────────────────────────────────────────
+*.local
+.env
+.env.*
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ── OS junk ───────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ── Editor temp files ─────────────────────────────────────────────────────────
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

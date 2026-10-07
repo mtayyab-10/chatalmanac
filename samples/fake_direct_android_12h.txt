@@ -1,0 +1,30 @@
+WhatsApp Chat with Yasmin Nour
+01/03/2024, 8:15 AM - Tariq Mirza: Good morning. Are you free to talk later today?
+01/03/2024, 8:17 AM - Yasmin Nour: Good morning. Yes, I am free after 3pm.
+01/03/2024, 8:18 AM - Tariq Mirza: Perfect. I will call at 3:30.
+01/03/2024, 8:18 AM - Yasmin Nour: 👍
+01/03/2024, 15:30 AM - Tariq Mirza: Missed voice call
+01/03/2024, 15:35 AM - Tariq Mirza: Sorry about that, the call dropped. Are you still there?
+01/03/2024, 15:36 AM - Yasmin Nour: Yes, no problem. Let us just do it over text.
+01/03/2024, 15:37 AM - Tariq Mirza: Sure. So, about the project timeline.
+01/03/2024, 15:38 AM - Yasmin Nour: The main concern is the parser phase. If it takes longer than two weeks we will need to adjust the design phase.
+01/03/2024, 15:39 AM - Tariq Mirza: I agree. Let us set a hard checkpoint at day ten.
+01/03/2024, 15:40 AM - Yasmin Nour: That works. I will put it in the schedule.
+01/03/2024, 15:41 AM - Tariq Mirza: <Media omitted>
+01/03/2024, 15:42 AM - Yasmin Nour: Thank you for the notes. I will review them tonight.
+01/03/2024, 15:43 AM - Tariq Mirza: No rush. The review is not due until Friday.
+02/03/2024, 10:05 AM - Yasmin Nour: Good morning. I reviewed the notes. One question: are we handling multiline messages in the first pass?
+02/03/2024, 10:07 AM - Tariq Mirza: Yes. I tested it with a real export last night (using the sample file, not a real chat). Multiline messages that span
+three or four lines work correctly. The parser accumulates continuation lines until it sees a new timestamp.
+02/03/2024, 10:09 AM - Yasmin Nour: That is exactly what I was hoping for. Good.
+02/03/2024, 10:10 AM - Tariq Mirza: There is one edge case: a line that starts with a number followed by a slash could confuse the detector.
+02/03/2024, 10:11 AM - Yasmin Nour: Can you give me an example?
+02/03/2024, 10:12 AM - Tariq Mirza: Sure. If someone writes "1/3 of the work is done" as the start of a message body, the detector might try to parse it as a date.
+02/03/2024, 10:13 AM - Yasmin Nour: Ah. How do we fix that?
+02/03/2024, 10:14 AM - Tariq Mirza: We check that it is a continuation line (no timestamp prefix) and skip it in the detector loop. The fix is in the latest commit.
+02/03/2024, 10:15 AM - Yasmin Nour: 
+02/03/2024, 10:15 AM - Yasmin Nour: This message was deleted
+02/03/2024, 10:16 AM - Yasmin Nour: Anyway — great work. I think we are on track.
+04/03/2024, 9:00 AM - Tariq Mirza: Quick heads up: I will be offline tomorrow for a personal appointment.
+04/03/2024, 9:01 AM - Yasmin Nour: No problem. Take care.
+04/03/2024, 9:02 AM - Tariq Mirza: Thank you. I will catch up on Friday.

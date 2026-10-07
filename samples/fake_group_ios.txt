@@ -1,0 +1,51 @@
+WhatsApp Chat with Team Chatalmanac
+[01/01/2024, 09:00:00] Hassan: Good morning everyone. Happy new year.
+[01/01/2024, 09:02:34] Ahmad: Happy new year! Hope this year goes well for all of us.
+[01/01/2024, 09:03:11] Sara: Same to you both. 🎉
+[01/01/2024, 09:05:00] Hassan: Did everyone finish the review before the break?
+[01/01/2024, 09:06:22] Ahmad: Yes, I sent my notes last week.
+[01/01/2024, 09:06:45] Sara: I sent mine too. It should all be in the shared folder.
+[01/01/2024, 09:08:00] Hassan: Perfect. Let us plan our first meeting for the 3rd.
+[01/01/2024, 09:09:10] Ahmad: Works for me.
+[01/01/2024, 09:09:30] Sara: Same, I am free all afternoon.
+[03/01/2024, 10:00:00] Hassan: Meeting starts now. Is everyone here?
+[03/01/2024, 10:00:45] Ahmad: Here.
+[03/01/2024, 10:01:02] Sara: Here too.
+[03/01/2024, 10:01:30] Hassan: Great. First item: the parser architecture.
+[03/01/2024, 10:03:00] Ahmad: I think we should keep the detector and the parser as separate modules. Easier to test.
+[03/01/2024, 10:04:15] Sara: Agreed. And the worker should import only from the index, not directly from parse.ts.
+[03/01/2024, 10:05:00] Hassan: That makes sense. I will document it.
+[03/01/2024, 10:06:33] Ahmad: Also we should add progress callbacks so the UI does not freeze on large files.
+[03/01/2024, 10:07:00] Sara: Yes. I saw a 50 MB export in the wild. It took a while to process.
+[03/01/2024, 10:08:00] Hassan: Good point. Let us cap at 50 MB and show a warning for anything over 30 MB on mobile.
+[03/01/2024, 10:09:11] Ahmad: Agreed. Do we have a test for large files yet?
+[03/01/2024, 10:10:00] Sara: Not yet. I will add one today.
+[03/01/2024, 10:11:00] Hassan: Second item: the privacy policy draft.
+[03/01/2024, 10:12:30] Ahmad: I read it. It is clear. One suggestion: add a sentence about browser extensions.
+[03/01/2024, 10:13:00] Sara: Good idea. Users often forget those exist.
+[03/01/2024, 10:14:15] Hassan: Added to the list. Any other feedback?
+[03/01/2024, 10:15:00] Ahmad: No. I think it is good as is.
+[03/01/2024, 10:15:30] Sara: Same. 👍
+[05/01/2024, 14:00:00] Sara: Quick update: I finished the large-file test. 50 MB processes in about 8 seconds on a mid-range phone.
+[05/01/2024, 14:02:00] Hassan: That is acceptable. We should mention it on the site though.
+[05/01/2024, 14:03:10] Ahmad: Agreed. Something like "large chats may take a few seconds on older phones".
+[05/01/2024, 14:04:00] Sara: I will write the copy.
+[05/01/2024, 14:05:00] Hassan: <Media omitted>
+[05/01/2024, 14:05:30] Ahmad: Is that the wireframe?
+[05/01/2024, 14:05:45] Hassan: Yes. First draft. Let me know what you think.
+[05/01/2024, 14:07:00] Ahmad: Looks very clean. I like the drop zone being the main focus.
+[05/01/2024, 14:08:00] Sara: Same. The stat cards below are a nice preview of what people will see.
+[05/01/2024, 14:09:00] Hassan: Thank you. I will refine it based on the font choice.
+[07/01/2024, 09:30:00] Ahmad: Morning. I pushed the timestamp parser tests. All passing.
+[07/01/2024, 09:31:00] Hassan: Nice work.
+[07/01/2024, 09:31:30] Sara: 👏
+[07/01/2024, 09:32:00] Ahmad: I added edge cases for 2-digit years and 12h/24h. Also tested the en-dash separator that some Android exports use.
+[07/01/2024, 09:33:00] Hassan: Good. The reference site had a bug with that separator. Let us make sure we handle it cleanly.
+[07/01/2024, 09:34:00] Ahmad: It is handled. The ANDROID_PATTERN now covers both hyphen and en-dash.
+[07/01/2024, 09:35:00] Sara: This message was deleted
+[07/01/2024, 09:35:30] Sara: Sorry, sent to the wrong chat. Ignore that.
+[07/01/2024, 09:36:00] Ahmad: 😄
+[07/01/2024, 09:36:30] Hassan: 😄
+[10/01/2024, 16:00:00] Hassan: End of first sprint. Good work everyone.
+[10/01/2024, 16:01:00] Ahmad: Thanks. Looking forward to the UI phase.
+[10/01/2024, 16:01:30] Sara: Same. The design is going to look great.
