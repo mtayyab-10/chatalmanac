@@ -1,3 +1,6 @@
+import { injectSpeedInsights } from '@vercel/speed-insights';
+
+injectSpeedInsights();
 /**
  * src/main.ts
  *
