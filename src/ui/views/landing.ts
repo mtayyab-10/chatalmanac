@@ -6,7 +6,7 @@
 
 import { renderImportZone } from '../components/import-zone.ts';
 import { renderFooter } from '../components/footer.ts';
-import { analyzeText, loadSampleChat } from '../app.ts';
+import { loadSampleChat } from '../app.ts';
 import { renderLineChart, renderBarChart } from '../components/charts.ts';
 import { t } from '../../locales/index.ts';
 
