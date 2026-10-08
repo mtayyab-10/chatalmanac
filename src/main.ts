@@ -1,6 +1,9 @@
 import { injectSpeedInsights } from '@vercel/speed-insights';
+import { inject } from '@vercel/analytics';
 
+// Initialize performance & web analytics
 injectSpeedInsights();
+inject();
 /**
  * src/main.ts
  *
