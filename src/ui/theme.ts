@@ -35,6 +35,6 @@ export function toggleTheme(): Theme {
 }
 
 export function initTheme(): void {
-  const theme = getTheme();
-  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.removeItem('chatalmanac_theme');
+  document.documentElement.setAttribute('data-theme', 'light');
 }
