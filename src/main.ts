@@ -145,18 +145,20 @@ async function main(): Promise<void> {
         loadingEl = null;
         window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       }
-    }
+      }
+
+    // Title map for subpages
+    const PAGE_TITLES: Record<string, string> = {
+      'results': 'Your Results | Chatalmanac',
+      'saved': 'Saved Analyses | Chatalmanac',
+      'tools': 'Chat Analysis Tools | Chatalmanac',
+      'how-to-export': 'How to Export Your Chat | Chatalmanac',
+    };
+
+    const DEFAULT_TITLE = 'Chatalmanac | Private Chat Analytics';
 
     // Update page title
-    document.title = state.view === 'results'
-      ? 'Your results — Chatalmanac'
-      : state.view === 'saved'
-      ? 'Saved analyses — Chatalmanac'
-      : state.view === 'tools'
-      ? 'Chat analysis tools — Chatalmanac'
-      : state.view === 'how-to-export'
-      ? 'How to export your chat — Chatalmanac'
-      : 'Chatalmanac — chat analytics';
+    document.title = PAGE_TITLES[state.view] ?? DEFAULT_TITLE;
   }
 
   subscribe(render);
