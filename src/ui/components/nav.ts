@@ -185,53 +185,14 @@ export function renderNav(): HTMLElement {
           </div>
 
           <div class="mobile-nav-body">
-            <div class="mobile-nav-section-title">${locale.nav.tools}</div>
-            <div class="mobile-nav-tools-list">
-              <a href="#" class="mobile-nav-tool-item" data-tool="activity">
-                <span class="mobile-nav-tool-icon">⏱️</span>
-                <div>
-                  <div class="font-medium">${locale.toolsPage.inactivity.title}</div>
-                  <div class="text-xs text-muted">${locale.toolsPage.inactivity.badge}</div>
-                </div>
-              </a>
-              <a href="#" class="mobile-nav-tool-item" data-tool="words">
-                <span class="mobile-nav-tool-icon">📊</span>
-                <div>
-                  <div class="font-medium">${locale.toolsPage.counter.title}</div>
-                  <div class="text-xs text-muted">${locale.toolsPage.counter.badge}</div>
-                </div>
-              </a>
-              <a href="#" class="mobile-nav-tool-item" data-tool="timeline">
-                <span class="mobile-nav-tool-icon">📅</span>
-                <div>
-                  <div class="font-medium">${locale.toolsPage.heatmap.title}</div>
-                  <div class="text-xs text-muted">${locale.toolsPage.heatmap.badge}</div>
-                </div>
-              </a>
-              <a href="#" class="mobile-nav-tool-item" data-tool="compare">
-                <span class="mobile-nav-tool-icon">👥</span>
-                <div>
-                  <div class="font-medium">${locale.toolsPage.compare.title}</div>
-                  <div class="text-xs text-muted">${locale.toolsPage.compare.badge}</div>
-                </div>
-              </a>
-              <a href="#" class="mobile-nav-tool-item" data-tool="evidence">
-                <span class="mobile-nav-tool-icon">📑</span>
-                <div>
-                  <div class="font-medium">${locale.toolsPage.evidence.title}</div>
-                  <div class="text-xs text-muted">${locale.toolsPage.evidence.badge}</div>
-                </div>
-              </a>
-            </div>
-
-            <div class="mobile-nav-divider"></div>
-
-            <div class="mobile-nav-section-title">Pages</div>
             <div class="mobile-nav-links-list">
-              <a href="#" class="mobile-nav-link" data-view="tools">🛠️ ${locale.nav.tools} (Overview)</a>
-              <a href="#" class="mobile-nav-link" data-view="how-to-export">📥 ${locale.nav.howToExport}</a>
-              <a href="#" class="mobile-nav-link" data-view="privacy">🔒 ${locale.nav.privacy}</a>
-              <a href="#" class="mobile-nav-link" data-view="saved">💾 ${locale.nav.savedResults}</a>
+              <a href="#" class="mobile-nav-link" data-view="tools">
+                <span>${locale.nav.tools}</span>
+                <span class="mobile-nav-link-badge">Catalog</span>
+              </a>
+              <a href="#" class="mobile-nav-link" data-view="how-to-export">${locale.nav.howToExport}</a>
+              <a href="#" class="mobile-nav-link" data-view="privacy">${locale.nav.privacy}</a>
+              <a href="#" class="mobile-nav-link" data-view="saved">${locale.nav.savedResults}</a>
             </div>
           </div>
         </div>
@@ -271,20 +232,23 @@ export function renderNav(): HTMLElement {
     };
 
     if (dropdownItem && toolsTrigger) {
-      // Hover behavior: enter opens immediately
+      // Hover behavior (desktop only — pointer: fine devices)
+      const isCoarsePointer = () => window.matchMedia('(pointer: coarse)').matches;
+
       dropdownItem.addEventListener('mouseenter', () => {
-        openDropdown();
+        if (!isCoarsePointer()) openDropdown();
       });
 
-      // Hover behavior: leave waits 220ms so cursor can safely travel without sudden disappearance
       dropdownItem.addEventListener('mouseleave', () => {
-        leaveTimer = window.setTimeout(() => {
-          dropdownItem.classList.remove('is-open');
-          toolsTrigger.setAttribute('aria-expanded', 'false');
-        }, 220);
+        if (!isCoarsePointer()) {
+          leaveTimer = window.setTimeout(() => {
+            dropdownItem.classList.remove('is-open');
+            toolsTrigger.setAttribute('aria-expanded', 'false');
+          }, 220);
+        }
       });
 
-      // Click behavior: user can click "Tools" to lock open/toggle the dropdown menu
+      // Click/tap behavior: toggle the dropdown for all pointer types
       toolsTrigger.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -315,7 +279,8 @@ export function renderNav(): HTMLElement {
         mobileDrawer.removeAttribute('inert');
         hamburgerBtn?.setAttribute('aria-expanded', 'true');
         hamburgerBtn?.classList.add('is-active');
-        document.body.style.overflow = 'hidden';
+        // iOS Safari scroll lock: use body class (position:fixed approach in CSS)
+        document.body.classList.add('mobile-nav-open');
         // Move focus into the drawer for keyboard/AT users
         (mobileDrawer.querySelector<HTMLElement>('#mobile-nav-close'))?.focus();
       }
@@ -327,7 +292,7 @@ export function renderNav(): HTMLElement {
         mobileDrawer.setAttribute('inert', '');
         hamburgerBtn?.setAttribute('aria-expanded', 'false');
         hamburgerBtn?.classList.remove('is-active');
-        document.body.style.overflow = '';
+        document.body.classList.remove('mobile-nav-open');
         // Return focus to the hamburger button
         hamburgerBtn?.focus();
       }
@@ -341,7 +306,19 @@ export function renderNav(): HTMLElement {
     });
 
     mobileClose?.addEventListener('click', closeMobileNav);
+    // Also handle touchend on close button for iOS
+    mobileClose?.addEventListener('touchend', (e) => { e.preventDefault(); closeMobileNav(); });
+
     mobileBackdrop?.addEventListener('click', closeMobileNav);
+    // touchstart on backdrop closes drawer on iOS without needing a full tap cycle
+    mobileBackdrop?.addEventListener('touchstart', (e) => { e.preventDefault(); closeMobileNav(); }, { passive: false });
+
+    // Escape key closes the mobile drawer
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileDrawer?.classList.contains('is-open')) {
+        closeMobileNav();
+      }
+    });
 
     // Logo click → home
     logoLink.addEventListener('click', (e) => {

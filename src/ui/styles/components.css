@@ -11,13 +11,27 @@
   height: var(--nav-height);
   display: flex;
   align-items: center;
+  /* No backdrop-filter here — it would create a CSS containing block for
+     position:fixed children (like .mobile-nav-drawer), trapping them
+     inside the nav's 52px height so the drawer never appears. */
+  border-bottom: 1px solid var(--color-border);
+  overflow: visible;
+}
+
+/* Frosted-glass background on a pseudo-element so it does NOT
+   create a containing block for position:fixed descendants. */
+.site-nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
   background: rgba(20, 19, 15, 0.9);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--color-border);
+  z-index: -1;
+  pointer-events: none;
 }
 
-[data-theme="light"] .site-nav {
+[data-theme="light"] .site-nav::before {
   background: rgba(247, 243, 234, 0.92);
 }
 
@@ -341,15 +355,16 @@
   justify-content: center;
   align-items: center;
   gap: 4px;
-  width: 36px;
-  height: 36px;
-  padding: 6px;
+  width: 44px;
+  height: 44px;
+  padding: 8px;
   background: var(--color-bg-elevated);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   cursor: pointer;
   color: var(--color-text);
   transition: all var(--duration-fast);
+  touch-action: manipulation;
 }
 
 .nav-hamburger:hover {
@@ -397,9 +412,9 @@
 .mobile-nav-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(15, 23, 42, 0.28);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 }
 
 .mobile-nav-content {
@@ -442,14 +457,16 @@
   background: var(--color-bg-elevated);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--color-text-muted);
   cursor: pointer;
   transition: all var(--duration-fast);
+  touch-action: manipulation;
+  flex-shrink: 0;
 }
 
 .mobile-nav-close:hover {
@@ -476,13 +493,15 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-2) var(--space-2.5);
+  padding: var(--space-3) var(--space-2-5);
   border-radius: var(--radius-md);
   text-decoration: none;
   color: var(--color-text);
   background: var(--color-bg-elevated);
   border: 1px solid transparent;
   transition: all var(--duration-fast);
+  min-height: 44px;
+  touch-action: manipulation;
 }
 
 .mobile-nav-tool-item:hover {
@@ -532,18 +551,32 @@
 .mobile-nav-link {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-2.5);
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-3);
   border-radius: var(--radius-md);
   text-decoration: none;
   color: var(--color-text);
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
-  transition: background var(--duration-fast);
+  transition: background var(--duration-fast), color var(--duration-fast);
+  min-height: 44px;
+  touch-action: manipulation;
 }
 
 .mobile-nav-link:hover {
   background: var(--color-bg-hover);
+  color: var(--color-accent);
+}
+
+.mobile-nav-link-badge {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: var(--weight-semibold);
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent-dim);
+  color: var(--color-accent);
 }
 
 @media (max-width: 768px) {
@@ -553,6 +586,27 @@
   .nav-hamburger {
     display: flex;
   }
+  /* Collapse locale picker label text on very small viewports */
+  .locale-current-name {
+    display: none;
+  }
+  /* Ensure locale trigger stays compact */
+  .locale-trigger {
+    padding: 0;
+    width: 44px;
+    justify-content: center;
+  }
+  .locale-chevron-icon {
+    display: none;
+  }
+}
+
+/* Lock body scroll when mobile drawer is open.
+   NOTE: Do NOT use position:fixed on body here — it would create a
+   containing block for position:fixed elements (like .mobile-nav-drawer)
+   and break the drawer's viewport-relative positioning on iOS/Chrome. */
+body.mobile-nav-open {
+  overflow: hidden;
 }
 
 /* ─── Hero ───────────────────────────────────────────────────────────────── */
@@ -624,6 +678,29 @@
   }
 }
 
+@media (max-width: 600px) {
+  .hero__headline {
+    font-size: clamp(1.6rem, 5vw, 2rem);
+  }
+
+  .hero__subheadline {
+    font-size: var(--text-sm);
+  }
+
+  /* Stack hero CTA buttons vertically */
+  .hero__cta-row,
+  .hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero__cta-row .btn,
+  .hero__actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* ─── Import zone ────────────────────────────────────────────────────────── */
 .import-zone-wrapper {
   display: flex;
@@ -646,6 +723,7 @@
     border-color var(--duration-base) var(--ease-out),
     background var(--duration-base) var(--ease-out),
     box-shadow var(--duration-base) var(--ease-out);
+  touch-action: manipulation;
 }
 
 .import-zone:hover,
@@ -1210,6 +1288,36 @@
   }
 }
 
+@media (max-width: 480px) {
+  .footer__cta {
+    padding: var(--space-6);
+  }
+
+  .footer__cta-title {
+    font-size: var(--text-lg);
+  }
+
+  .footer__cta-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .footer__cta-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .footer__bottom-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer__meta-links {
+    flex-wrap: wrap;
+  }
+}
+
 /* ─── Loading view ───────────────────────────────────────────────────────── */
 .loading-page {
   flex: 1;
@@ -1374,9 +1482,13 @@
 
 .tabs-inner {
   display: flex;
+  align-items: center;
   overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  gap: var(--space-1);
 }
 
 .tabs-inner::-webkit-scrollbar {
@@ -1384,6 +1496,10 @@
 }
 
 .tab-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   padding: var(--space-4) var(--space-5);
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
@@ -1392,6 +1508,8 @@
   border-radius: 0;
   white-space: nowrap;
   transition: color var(--duration-fast), border-color var(--duration-fast);
+  touch-action: manipulation;
+  cursor: pointer;
 }
 
 .tab-btn:hover {
@@ -1875,6 +1993,42 @@
     align-items: flex-start;
   }
 
+  .results-header__actions {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  /* Shortcuts button: hidden on mobile touchscreens, preserved on desktop/laptops */
+  #shortcuts-help-btn {
+    display: none !important;
+  }
+
+  .results-header__actions #new-file-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Tabs bar on mobile: hide keyboard shortcut number badges and allow smooth horizontal touch swipe */
+  .tab-btn__key {
+    display: none !important;
+  }
+
+  .results-tabs .container {
+    padding-inline: var(--space-3);
+  }
+
+  .tabs-inner {
+    gap: 0;
+  }
+
+  .tab-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: var(--space-3) var(--space-3-5);
+    font-size: var(--text-xs);
+    min-height: 44px;
+  }
+
   .overview-hero-row {
     grid-template-columns: 1fr;
   }
@@ -1908,6 +2062,36 @@
 
   .loading-page {
     padding: var(--space-8);
+  }
+
+  /* Import zone smaller padding on phones */
+  .import-zone {
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+  }
+
+  /* Tab buttons: let them scroll but give more breathing room */
+  .tab-btn {
+    padding-inline: var(--space-4);
+  }
+}
+
+@media (max-width: 375px) {
+  .overview-compact-row {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-compact-card .stat-number {
+    font-size: var(--text-base);
+  }
+
+  .import-zone {
+    padding: var(--space-5);
+  }
+
+  /* Tools grid: single column on very small */
+  .tools-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -3673,5 +3857,72 @@
 @media (max-width: 640px) {
   .guide-why__grid {
     grid-template-columns: 1fr;
+  }
+
+  .guide-action-zone {
+    padding: var(--space-5);
+  }
+
+  .guide-action-zone__inner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .guide-action-zone__buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .guide-action-zone__buttons .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .guide-step {
+    padding: var(--space-4);
+    gap: var(--space-3);
+  }
+
+  .guide-why {
+    padding: var(--space-5);
+  }
+}
+
+@media (max-width: 375px) {
+  .compare-duel-card {
+    padding: var(--space-4);
+  }
+
+  .compare-duel-select-wrap {
+    max-width: 100%;
+  }
+
+  .compare-speed-grid,
+  .compare-emoji-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .saved-card {
+    padding: var(--space-4);
+  }
+
+  .saved-card__names {
+    font-size: var(--text-sm);
+  }
+
+  /* Shortcuts modal full width on tiny screens */
+  .shortcuts-modal {
+    max-width: 100%;
+  }
+
+  /* Tools hero actions stack */
+  .tools-hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tools-hero__actions .btn {
+    width: 100%;
+    justify-content: center;
   }
 }

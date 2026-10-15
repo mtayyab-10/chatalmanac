@@ -126,6 +126,8 @@ export function renderResults(stats: SerializedStats): HTMLElement {
   headerStrip.querySelector('#shortcuts-help-btn')!.addEventListener('click', () => toggleShortcutsModal());
   page.appendChild(headerStrip);
 
+  let activeTab: TabId = getState().activeResultTab || 'overview';
+
   // ── Tabs ─────────────────────────────────────────────────────────────────
   const tabBar = document.createElement('div');
   tabBar.className = 'results-tabs';
@@ -134,14 +136,18 @@ export function renderResults(stats: SerializedStats): HTMLElement {
   tabBar.innerHTML = `
     <div class="container">
       <div class="tabs-inner">
-        ${TABS.map((id, i) => `
-          <button class="tab-btn ${i === 0 ? 'active' : ''}" role="tab"
-                  aria-selected="${i === 0}" data-tab="${id}" id="tab-${id}"
+        ${TABS.map((id, i) => {
+          const isActive = id === activeTab;
+          return `
+          <button class="tab-btn ${isActive ? 'active' : ''}" role="tab"
+                  aria-selected="${isActive}" tabindex="${isActive ? '0' : '-1'}"
+                  data-tab="${id}" id="tab-${id}"
                   aria-controls="panel-${id}">
             <span class="tab-btn__key text-subtle text-xs" aria-hidden="true">${i + 1}</span>
             ${tabLabel(id, locale)}
           </button>
-        `).join('')}
+        `;
+        }).join('')}
       </div>
     </div>
   `;
@@ -151,15 +157,19 @@ export function renderResults(stats: SerializedStats): HTMLElement {
   const panelContainer = document.createElement('div');
   panelContainer.className = 'results-panels';
 
-  let activeTab: TabId = getState().activeResultTab || 'overview';
-
   function showTab(id: TabId): void {
     activeTab = id;
-    tabBar.querySelectorAll('.tab-btn').forEach((btn) => {
-      const isActive = (btn as HTMLElement).dataset['tab'] === id;
+    tabBar.querySelectorAll<HTMLButtonElement>('.tab-btn').forEach((btn) => {
+      const isActive = btn.dataset['tab'] === id;
       btn.classList.toggle('active', isActive);
       btn.setAttribute('aria-selected', String(isActive));
+      btn.setAttribute('tabindex', isActive ? '0' : '-1');
     });
+
+    // Auto-scroll the active tab into view horizontally (especially on mobile)
+    const activeBtn = tabBar.querySelector<HTMLElement>(`.tab-btn[data-tab="${id}"]`);
+    activeBtn?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
     panelContainer.innerHTML = '';
     const panel = buildPanel(id);
     panel.id = `panel-${id}`;
@@ -201,6 +211,31 @@ export function renderResults(stats: SerializedStats): HTMLElement {
     if (!btn) return;
     const id = btn.dataset['tab'] as TabId;
     if (id) showTab(id);
+  });
+
+  // WAI-ARIA tablist arrow key navigation (ArrowLeft / ArrowRight / Home / End)
+  tabBar.addEventListener('keydown', (e: KeyboardEvent) => {
+    const tabs = Array.from(tabBar.querySelectorAll<HTMLButtonElement>('.tab-btn'));
+    const currentIndex = tabs.findIndex((t) => t === document.activeElement);
+    if (currentIndex === -1) return;
+
+    let targetIndex = -1;
+    if (e.key === 'ArrowRight') {
+      targetIndex = (currentIndex + 1) % tabs.length;
+    } else if (e.key === 'ArrowLeft') {
+      targetIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+    } else if (e.key === 'Home') {
+      targetIndex = 0;
+    } else if (e.key === 'End') {
+      targetIndex = tabs.length - 1;
+    }
+
+    if (targetIndex !== -1) {
+      e.preventDefault();
+      tabs[targetIndex]?.focus();
+      const targetId = tabs[targetIndex]?.dataset['tab'] as TabId;
+      if (targetId) showTab(targetId);
+    }
   });
 
   // Global keyboard listeners

@@ -30,10 +30,6 @@ export function renderLanding(): HTMLElement {
         <div class="hero__inner">
           <div class="hero__copy">
             <div class="badge badge--teal hero__badge">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M8 1L2 4v4c0 3.5 2.5 6.8 6 8 3.5-1.2 6-4.5 6-8V4L8 1z"
-                      fill="var(--color-accent)" opacity="0.9"/>
-              </svg>
               ${locale.landing.badge || '100% Client-Side · Private & Offline-Ready'}
             </div>
             <h1 class="hero__headline">${locale.landing.headline}</h1>
