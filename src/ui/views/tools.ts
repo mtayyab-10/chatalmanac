@@ -27,9 +27,6 @@ export function renderTools(): HTMLElement {
         <p class="tools-hero__subtitle text-muted">${locale.toolsPage.subtitle}</p>
         <div class="tools-hero__actions">
           <button class="btn btn--primary btn--md" id="tools-hero-demo-btn" type="button">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <polygon points="5,3 13,8 5,13" fill="currentColor"/>
-            </svg>
             ${locale.toolsPage.tryDemo}
           </button>
           <button class="btn btn--secondary btn--md" id="tools-hero-open-btn" type="button">

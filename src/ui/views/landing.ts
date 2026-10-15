@@ -152,9 +152,6 @@ export function renderLanding(): HTMLElement {
 
         <div class="landing-preview-cta">
           <button class="btn btn--secondary btn--md" id="landing-preview-demo-btn" type="button">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <polygon points="5,3 13,8 5,13" fill="currentColor"/>
-            </svg>
             ${locale.landing.tryDemoBtn || 'Try demo chat'}
           </button>
         </div>
