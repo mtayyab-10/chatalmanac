@@ -188,7 +188,6 @@ export function renderNav(): HTMLElement {
             <div class="mobile-nav-links-list">
               <a href="#" class="mobile-nav-link" data-view="tools">
                 <span>${locale.nav.tools}</span>
-                <span class="mobile-nav-link-badge">Catalog</span>
               </a>
               <a href="#" class="mobile-nav-link" data-view="how-to-export">${locale.nav.howToExport}</a>
               <a href="#" class="mobile-nav-link" data-view="privacy">${locale.nav.privacy}</a>
@@ -281,8 +280,8 @@ export function renderNav(): HTMLElement {
         hamburgerBtn?.classList.add('is-active');
         // iOS Safari scroll lock: use body class (position:fixed approach in CSS)
         document.body.classList.add('mobile-nav-open');
-        // Move focus into the drawer for keyboard/AT users
-        (mobileDrawer.querySelector<HTMLElement>('#mobile-nav-close'))?.focus();
+        // Move focus to first nav link for keyboard/AT users
+        (mobileDrawer.querySelector<HTMLElement>('.mobile-nav-link'))?.focus();
       }
     };
 
